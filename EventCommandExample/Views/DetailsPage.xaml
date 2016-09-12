@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="EventCommandExample.Views.DetailsPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="10">
+                <controls:CircleImage WidthRequest="200"
+                                      HeightRequest="200"
+                                      HorizontalOptions="CenterAndExpand"
+                                      Aspect="AspectFill"
+                                      BorderColor="Aqua"
+                                      BorderThickness="3"
+                                      Source="{Binding Monkey.Image}" />
+                <Label FontAttributes="Bold" Text="{Binding Monkey.Name}" />
+                <Label FontSize="Micro" Text="{Binding Monkey.Location}" />
+                <Label FontSize="Large" Text="{Binding Monkey.Details}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+
+</ContentPage>
