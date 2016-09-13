@@ -64,6 +64,8 @@
     <Compile Include="Views\DetailsPage.xaml.cs">
       <DependentUpon>DetailsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ItemTappedEventArgsToItemTappedConverter.cs" />
+    <Compile Include="Converters\TextChangedEventArgsToTextChangedConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
