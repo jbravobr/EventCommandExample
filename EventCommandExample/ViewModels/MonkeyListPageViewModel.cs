@@ -6,6 +6,8 @@ using Prism.Navigation;
 using System.Linq;
 using System.Threading.Tasks;
 using PropertyChanged;
+using System.Collections.Generic;
+using System;
 
 namespace EventCommandExample.ViewModels
 {
@@ -14,6 +16,10 @@ namespace EventCommandExample.ViewModels
     {
         public ObservableCollection<Monkey> Monkeys { get; set; }
         public ObservableCollection<Grouping<string, Monkey>> MonkeysGrouped { get; set; }
+        public FormattedString searchedMonkeyNameFormatted { get; set; }
+
+        public bool isSearching { get; set; }
+        public bool isNotSearching { get; set; } = true;
 
         INavigationService _navigationService;
 
@@ -37,6 +43,9 @@ namespace EventCommandExample.ViewModels
         {
             get
             {
+                isNotSearching = false;
+                isSearching = true;
+
                 return new Command<string>(DoSearchMonkey);
             }
         }
@@ -51,6 +60,12 @@ namespace EventCommandExample.ViewModels
                          orderby monkey.Name
                          group monkey by monkey.NameSort into monkeyGroup
                          select new Grouping<string, Monkey>(monkeyGroup.Key, monkeyGroup);
+
+            if (!string.IsNullOrEmpty(letter))
+                foreach (var item in sorted)
+                {
+                    item.FirstOrDefault().NameFormatted = HighlightMonkeyNameSearched(item.First().Name, letter);
+                }
 
             MonkeysGrouped = new ObservableCollection<Grouping<string, Monkey>>(sorted);
         }
@@ -67,6 +82,32 @@ namespace EventCommandExample.ViewModels
             parameters.Add("monkey", monkey);
 
             await _navigationService.NavigateAsync("DetailsPage", parameters);
+        }
+
+        public FormattedString HighlightMonkeyNameSearched(string name, string letters, int minLength = 1)
+        {
+            var indexes = Utils.HighlightText(name, letters, minLength);
+            var formattedString = new FormattedString();
+
+            foreach (var item in indexes)
+            {
+                for (int i = 0; i < name.Length; i++)
+                {
+                    if (!item.Contains(i))
+                        formattedString.Spans.Add(new Span
+                        {
+                            Text = name[i].ToString()
+                        });
+                    else if (item.Contains(i))
+                        formattedString.Spans.Add(new Span
+                        {
+                            Text = name[i].ToString(),
+                            FontAttributes = FontAttributes.Bold | FontAttributes.Italic
+                        });
+                }
+            }
+
+            return formattedString;
         }
     }
 }

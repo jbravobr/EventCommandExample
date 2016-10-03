@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage x:Class="EventCommandExample.Views.MonkeyListPage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:b="clr-namespace:EventCommandExample"
              xmlns:c="clr-namespace:EventCommandExample"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions">
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <c:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
@@ -15,8 +14,9 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout>
-            <SearchBar HorizontalOptions="Center"
+        <StackLayout Margin="0,20,0,0">
+            <SearchBar x:Name="SearchBar"
+                       VerticalOptions="StartAndExpand"
                        FontAttributes="Bold"
                        FontSize="26"
                        Placeholder="Monkey Search"
@@ -30,6 +30,12 @@
                 </SearchBar.Behaviors>
 
             </SearchBar>
+
+
+            <Label FormattedText="{Binding nome}" />
+
+
+
             <ListView x:Name="listViewMonkeys"
                       GroupDisplayBinding="{Binding Key}"
                       GroupShortNameBinding="{Binding Key}"
@@ -65,9 +71,16 @@
                                                       BorderColor="Aqua"
                                                       BorderThickness="3"
                                                       Source="{Binding Image}" />
+
+
                                 <Label Grid.Column="1"
                                        VerticalOptions="End"
-                                       Text="{Binding Name}" />
+                                       FormattedText="{Binding NameFormatted}"
+                                       IsVisible="true" />
+                               <!-- <Label Grid.Column="1"
+                                       VerticalOptions="End"
+                                       IsVisible="{Binding isNotSearching}"
+                                       Text="{Binding Name}" />-->
                                 <Label Grid.Row="1"
                                        Grid.Column="1"
                                        VerticalOptions="Start"

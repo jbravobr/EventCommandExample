@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Xamarin.Forms;
 
 namespace EventCommandExample
 {
@@ -12,6 +14,8 @@ namespace EventCommandExample
         public string Image { get; set; }
 
         public string NameSort => Name[0].ToString();
+
+        public FormattedString NameFormatted { get; set; }
     }
 }
 
