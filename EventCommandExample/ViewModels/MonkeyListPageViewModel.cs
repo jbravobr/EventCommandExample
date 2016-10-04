@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using PropertyChanged;
 using System.Collections.Generic;
 using System;
+using System.Text;
+using Humanizer;
 
 namespace EventCommandExample.ViewModels
 {
@@ -17,9 +19,6 @@ namespace EventCommandExample.ViewModels
         public ObservableCollection<Monkey> Monkeys { get; set; }
         public ObservableCollection<Grouping<string, Monkey>> MonkeysGrouped { get; set; }
         public FormattedString searchedMonkeyNameFormatted { get; set; }
-
-        public bool isSearching { get; set; }
-        public bool isNotSearching { get; set; } = true;
 
         INavigationService _navigationService;
 
@@ -43,9 +42,6 @@ namespace EventCommandExample.ViewModels
         {
             get
             {
-                isNotSearching = false;
-                isSearching = true;
-
                 return new Command<string>(DoSearchMonkey);
             }
         }
@@ -65,6 +61,13 @@ namespace EventCommandExample.ViewModels
                 foreach (var item in sorted)
                 {
                     item.FirstOrDefault().NameFormatted = HighlightMonkeyNameSearched(item.First().Name, letter);
+                }
+            else
+                foreach (var item in sorted)
+                {
+                    var formattedString = new FormattedString();
+                    formattedString.Spans.Add(new Span { Text = item.First().Name });
+                    item.FirstOrDefault().NameFormatted = formattedString;
                 }
 
             MonkeysGrouped = new ObservableCollection<Grouping<string, Monkey>>(sorted);
@@ -86,24 +89,113 @@ namespace EventCommandExample.ViewModels
 
         public FormattedString HighlightMonkeyNameSearched(string name, string letters, int minLength = 1)
         {
-            var indexes = Utils.HighlightText(name, letters, minLength);
             var formattedString = new FormattedString();
+            var lettersAdded = new List<string>();
 
-            foreach (var item in indexes)
+
+            if (!lettersAdded.Any(letters.Contains))
             {
-                for (int i = 0; i < name.Length; i++)
+                lettersAdded.Add(letters);
+                var str = new StringBuilder(name.ToLower());
+
+                var index = name.ToLower().IndexOf(letters.ToLower());
+                var removed = str.Remove(name.ToLower().IndexOf(letters.ToLower()), letters.Length);
+
+                if (index == 0)
                 {
-                    if (!item.Contains(i))
-                        formattedString.Spans.Add(new Span
+                    formattedString.Spans.Add(new Span
+                    {
+                        Text = letters.Transform(To.TitleCase),
+                        FontAttributes = FontAttributes.Bold | FontAttributes.Italic,
+                        ForegroundColor = Color.Red
+                    });
+                    formattedString.Spans.Add(new Span
+                    {
+                        Text = removed.ToString()
+                    });
+                }
+                else if (index > 0)
+                {
+                    bool isBeginOfName = true;
+
+                    for (int i = 0; i < name.Length; i++)
+                    {
+                        if (i < index)
                         {
-                            Text = name[i].ToString()
-                        });
-                    else if (item.Contains(i))
-                        formattedString.Spans.Add(new Span
+                            if (isBeginOfName)
+                            {
+                                formattedString.Spans.Add(new Span
+                                {
+                                    Text = removed[i].ToString().Transform(To.TitleCase)
+                                });
+
+                                isBeginOfName = false;
+                            }
+                            else
+                                formattedString.Spans.Add(new Span
+                                {
+                                    Text = removed[i].ToString().Transform(To.LowerCase)
+                                });
+                        }
+                        else if (i == index)
                         {
-                            Text = name[i].ToString(),
-                            FontAttributes = FontAttributes.Bold | FontAttributes.Italic
-                        });
+                            if (char.IsWhiteSpace(name[i - 1]))
+                                formattedString.Spans.Add(new Span
+                                {
+                                    Text = letters.Transform(To.TitleCase),
+                                    FontAttributes = FontAttributes.Bold | FontAttributes.Italic,
+                                    ForegroundColor = Color.Red
+                                });
+                            else
+                                formattedString.Spans.Add(new Span
+                                {
+                                    Text = letters.Transform(To.LowerCase),
+                                    FontAttributes = FontAttributes.Bold | FontAttributes.Italic,
+                                    ForegroundColor = Color.Red
+                                });
+                        }
+                        else
+                        {
+                            if (letters.Length > 1)
+                            {
+                                var formattedText = string.Empty;
+                                foreach (var span in formattedString.Spans)
+                                {
+                                    formattedText += span.Text;
+                                }
+
+                                if (i - 1 < name.Length)
+                                {
+                                    if (formattedText.ToLower() != name.ToLower())
+                                    {
+                                        if (char.IsWhiteSpace(name[i - 1]))
+                                            formattedString.Spans.Add(new Span
+                                            {
+                                                Text = name[i + letters.Length - 1].ToString().Transform(To.TitleCase)
+                                            });
+                                        else
+                                            formattedString.Spans.Add(new Span
+                                            {
+                                                Text = name[i + letters.Length - 1].ToString()
+                                            });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (char.IsWhiteSpace(name[i - 1]))
+                                    formattedString.Spans.Add(new Span
+                                    {
+                                        Text = name[i].ToString().Transform(To.TitleCase)
+                                    });
+                                else
+                                    formattedString.Spans.Add(new Span
+                                    {
+                                        Text = name[i].ToString()
+                                    });
+                            }
+                        }
+                    }
                 }
             }
 

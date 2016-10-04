@@ -4,7 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:b="clr-namespace:EventCommandExample"
              xmlns:c="clr-namespace:EventCommandExample"
-             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions">
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             xmlns:forms="clr-namespace:HighlightMarker.Forms;assembly=HighlightMarker.Forms">
     <ContentPage.Resources>
         <ResourceDictionary>
             <c:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
@@ -72,12 +73,19 @@
                                                       BorderThickness="3"
                                                       Source="{Binding Image}" />
 
-
+                                <!-- <Label Grid.Column="1"
+                                       VerticalOptions="End"
+                                       forms:TextHighlightBehavior.Background="{x:Static Color.Yellow}"
+                                       forms:TextHighlightBehavior.Foreground="{x:Static Color.Red}"
+                                       forms:TextHighlightBehavior.FullText="{Binding Name}"
+                                       forms:TextHighlightBehavior.HighlightedText="{Binding Text,
+                                                                                             Source={x:Reference SearchBar}}"
+                                       IsVisible="true" />-->
+								
                                 <Label Grid.Column="1"
                                        VerticalOptions="End"
-                                       FormattedText="{Binding NameFormatted}"
-                                       IsVisible="true" />
-                               <!-- <Label Grid.Column="1"
+                                       FormattedText="{Binding NameFormatted}" />
+                                <!--<Label Grid.Column="1"
                                        VerticalOptions="End"
                                        IsVisible="{Binding isNotSearching}"
                                        Text="{Binding Name}" />-->

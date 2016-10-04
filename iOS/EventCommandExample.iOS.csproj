@@ -125,6 +125,18 @@
     <Reference Include="ImageCircle.Forms.Plugin.iOS">
       <HintPath>..\packages\Xam.Plugins.Forms.ImageCircle.1.8.0.5\lib\Xamarin.iOS10\ImageCircle.Forms.Plugin.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="HighlightMarker">
+      <HintPath>..\packages\HighlightMarker.1.0.2\lib\xamarin.ios10\HighlightMarker.dll</HintPath>
+    </Reference>
+    <Reference Include="HighlightMarker.Platform">
+      <HintPath>..\packages\HighlightMarker.1.0.2\lib\xamarin.ios10\HighlightMarker.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="HighlightMarker.Forms">
+      <HintPath>..\packages\HighlightMarker.Forms.1.1.0-pre3\lib\xamarin.ios10\HighlightMarker.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="Humanizer">
+      <HintPath>..\packages\Humanizer.Core.2.1.0\lib\netstandard1.0\Humanizer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventCommandExample\EventCommandExample.csproj">
